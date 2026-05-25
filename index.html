@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>My Wellness Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --sage:#7A9E7E;--sage-light:#EEF4EE;--sage-mid:#C4D9C6;--sage-dark:#4A6B4E;
+    --blush:#D4847A;--blush-light:#FAEEED;
+    --clay:#C4956A;--clay-light:#FBF3EB;--clay-dark:#8B5E38;
+    --lavender:#9B8EC4;--lavender-light:#F2EFFA;--lavender-dark:#5A4E8A;
+    --cream:#FAF8F5;--text:#2C2B28;--text-mid:#6B6860;--text-light:#A09E9A;
+    --border:#E8E5E0;--white:#FFFFFF;
+    --radius:16px;--radius-sm:10px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:15px}
+  h1,h2,h3,.serif{font-family:'DM Serif Display',serif}
+
+  .app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--cream)}
+  .screen{display:none;flex:1;overflow-y:auto;padding-bottom:90px}
+  .screen.active{display:block}
+
+  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 20px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 2px;border:none;background:none;color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:9px;font-weight:500;transition:color 0.2s}
+  .nav-item i{font-size:20px}
+  .nav-item.active{color:var(--sage-dark)}
+  .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--sage-dark);opacity:0;transition:opacity 0.2s}
+  .nav-item.active .nav-dot{opacity:1}
+
+  .page-header{padding:52px 20px 16px;background:var(--white);border-bottom:1px solid var(--border)}
+  .page-title{font-size:26px;color:var(--text);margin-bottom:2px}
+  .page-sub{font-size:13px;color:var(--text-light)}
+
+  .card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px 18px;margin:12px 16px}
+  .card-sm{background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);padding:12px 14px}
+
+  /* HOME */
+  .home-hero{padding:52px 20px 20px;background:linear-gradient(160deg,#EEF4EE 0%,#FAF8F5 60%)}
+  .home-date{font-size:13px;color:var(--text-mid);margin-bottom:4px}
+  .home-greeting{font-size:28px;color:var(--text);margin-bottom:16px;line-height:1.2}
+  .weather-pill{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:50px;padding:8px 14px;font-size:13px;color:var(--text-mid);cursor:pointer}
+  .weather-pill i{font-size:18px;color:var(--clay)}
+  .weather-temp{font-weight:600;color:var(--text)}
+
+  .ai-card{margin:16px;background:var(--sage-dark);border-radius:var(--radius);padding:18px;color:var(--white)}
+  .ai-card-label{font-size:11px;letter-spacing:0.08em;opacity:0.7;margin-bottom:8px;text-transform:uppercase}
+  .ai-card-text{font-size:14px;line-height:1.6;opacity:0.95}
+  .ai-card-refresh{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:12px;opacity:0.7;cursor:pointer;background:none;border:none;color:var(--white);font-family:'DM Sans',sans-serif}
+
+  .progress-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
+  .stat-card{background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);padding:14px}
+  .stat-label{font-size:11px;color:var(--text-light);margin-bottom:6px}
+  .stat-val{font-size:22px;font-weight:600;color:var(--text)}
+  .progress-bar-wrap{background:var(--border);border-radius:50px;height:5px;margin-top:8px;overflow:hidden}
+  .progress-bar{height:100%;border-radius:50px;background:var(--sage)}
+
+  .section-label{font-size:12px;font-weight:600;letter-spacing:0.07em;color:var(--text-light);text-transform:uppercase;padding:4px 16px 8px}
+
+  .todo-chip{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin:0 16px 8px;cursor:pointer}
+  .todo-chip-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .todo-chip-icon i{font-size:15px}
+  .todo-chip-text{flex:1;font-size:13px;color:var(--text)}
+  .todo-chip-count{font-size:12px;color:var(--text-light);background:var(--cream);padding:3px 8px;border-radius:50px}
+
+  /* SELF CARE */
+  .routine-tabs{display:flex;gap:8px;padding:14px 16px;overflow-x:auto;scrollbar-width:none}
+  .routine-tab{flex-shrink:0;padding:7px 16px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text-mid);font-family:'DM Sans',sans-serif;transition:all 0.2s}
+  .routine-tab.active{background:var(--sage-dark);color:var(--white);border-color:var(--sage-dark)}
+
+  .routine-section{display:none;padding:0 16px}
+  .routine-section.active{display:block}
+  .routine-group-title{font-size:12px;font-weight:600;letter-spacing:0.07em;color:var(--text-light);text-transform:uppercase;margin:16px 0 8px}
+
+  .step-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+  .step-item.done{opacity:0.6}
+  .step-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+  .step-item.done .step-check{background:var(--sage);border-color:var(--sage)}
+  .step-item.done .step-check i{color:var(--white);font-size:13px}
+  .step-name{flex:1;font-size:14px}
+  .step-item.done .step-name{text-decoration:line-through;color:var(--text-light)}
+  .step-note{font-size:11px;color:var(--text-light)}
+  .reset-btn{font-size:12px;color:var(--text-light);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+
+  /* MEAL PLAN */
+  .generate-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--sage-dark);color:var(--white);border:none;border-radius:var(--radius-sm);padding:14px 20px;font-size:14px;font-weight:500;width:100%;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:16px}
+  .generate-btn:disabled{opacity:0.6}
+
+  .week-plan{margin:0 16px}
+  .day-card{background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
+  .day-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer}
+  .day-name{font-weight:600;font-size:14px}
+  .day-meals-preview{font-size:12px;color:var(--text-light)}
+  .day-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+  .day-body.open{display:block}
+  .meal-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+  .meal-row:last-child{border-bottom:none}
+  .fav-btn{background:none;border:none;cursor:pointer;color:var(--text-light);font-size:18px;padding:0;transition:color 0.2s}
+  .fav-btn.active{color:var(--blush)}
+
+  .grocery-section{margin:16px}
+  .grocery-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+  .grocery-item:last-child{border-bottom:none}
+  .grocery-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .grocery-item.checked .grocery-check{background:var(--sage);border-color:var(--sage)}
+  .grocery-item.checked .grocery-check i{color:var(--white);font-size:12px}
+  .grocery-item.checked span{text-decoration:line-through;color:var(--text-light)}
+  .grocery-cat{font-size:11px;font-weight:600;letter-spacing:0.07em;color:var(--text-light);text-transform:uppercase;padding:12px 0 6px}
+
+  .tab-toggle{display:flex;background:var(--border);border-radius:var(--radius-sm);padding:3px;margin:0 16px 16px}
+  .tab-toggle-btn{flex:1;padding:8px;border-radius:8px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--text-mid);transition:all 0.2s}
+  .tab-toggle-btn.active{background:var(--white);color:var(--text)}
+
+  .goal-chip{font-size:11px;padding:5px 10px;border-radius:50px;border:1px solid var(--border);color:var(--text-mid);background:var(--white);display:inline-block;margin:0 4px 4px 0}
+  .goal-chip.active{background:var(--blush-light);border-color:var(--blush);color:var(--blush)}
+
+  .approval-banner{background:var(--clay-light);border-radius:var(--radius-sm);padding:14px;margin:16px;display:none;align-items:flex-start;gap:10px}
+  .approval-banner.show{display:flex}
+  .approval-actions{display:flex;gap:8px;margin-top:10px}
+  .approve-btn{flex:1;padding:8px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none}
+  .approve-btn.yes{background:var(--sage-dark);color:var(--white)}
+  .approve-btn.no{background:var(--border);color:var(--text)}
+
+  .favs-section{margin:16px}
+  .fav-recipe-card{background:var(--blush-light);border:1px solid #EDBAAD;border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .fav-recipe-card i{color:var(--blush);font-size:16px}
+  .fav-recipe-name{flex:1;font-size:13px}
+  .fav-remove{background:none;border:none;cursor:pointer;color:var(--text-light);font-size:16px}
+
+  /* HABITS */
+  .habit-streak-banner{background:var(--clay-light);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .habit-item{background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);padding:14px;margin-bottom:8px}
+  .habit-top{display:flex;align-items:center;gap:12px}
+  .habit-icon-wrap{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .habit-icon-wrap i{font-size:18px}
+  .habit-info{flex:1}
+  .habit-name{font-size:14px;font-weight:500}
+  .habit-goal{font-size:12px;color:var(--text-light);margin-top:1px}
+  .habit-check-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s}
+  .habit-check-btn.done{background:var(--sage);border-color:var(--sage)}
+  .habit-check-btn.done i{color:var(--white)}
+  .habit-check-btn i{font-size:16px;color:var(--text-light)}
+  .habit-week{display:flex;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .habit-day-dot{flex:1;height:5px;border-radius:50px;background:var(--border)}
+  .habit-day-dot.done{background:var(--sage)}
+  .habit-day-dot.today{background:var(--sage-mid)}
+  .add-habit-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-light);font-size:13px;cursor:pointer;background:none;font-family:'DM Sans',sans-serif;width:100%;margin-top:4px}
+  .habit-90-day{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px}
+  .habit-90-label{font-size:12px;color:var(--text-light);margin-bottom:8px}
+  .habit-90-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:3px}
+  .h90-cell{aspect-ratio:1;border-radius:2px;background:var(--border)}
+  .h90-cell.done{background:var(--sage)}
+  .h90-cell.today{background:var(--sage-mid)}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-end;justify-content:center}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--white);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:420px;max-height:85vh;overflow-y:auto}
+  .modal-handle{width:36px;height:4px;border-radius:50px;background:var(--border);margin:0 auto 20px}
+  .modal-title{font-size:20px;margin-bottom:16px}
+  .form-label{font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:6px;display:block}
+  .form-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--white);outline:none;margin-bottom:14px}
+  .form-input:focus{border-color:var(--sage)}
+  .color-picks{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .color-pick{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+  .color-pick.selected{border-color:var(--text);transform:scale(1.15)}
+  .modal-save{background:var(--sage-dark);color:var(--white);border:none;border-radius:var(--radius-sm);padding:13px;width:100%;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px}
+
+  .loading-dots{display:inline-flex;gap:4px;align-items:center}
+  .loading-dots span{width:6px;height:6px;border-radius:50%;background:var(--white);animation:bounce 1.2s infinite}
+  .loading-dots span:nth-child(2){animation-delay:0.2s}
+  .loading-dots span:nth-child(3){animation-delay:0.4s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+  /* AFFIRMATIONS */
+  .affirmations-card{margin:0 16px 12px;background:var(--lavender-light);border-radius:var(--radius);border:1px solid #D8D0F0;padding:16px 18px}
+  .affirmations-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .affirmations-label{font-size:11px;letter-spacing:0.08em;color:var(--lavender-dark);text-transform:uppercase;font-weight:600}
+  .affirmations-edit-btn{background:none;border:none;cursor:pointer;color:var(--lavender-dark);font-size:13px;font-family:'DM Sans',sans-serif;opacity:0.7;display:flex;align-items:center;gap:4px;padding:0}
+  .affirmation-line{font-size:14px;color:var(--lavender-dark);line-height:1.5;padding:4px 0;font-style:italic}
+  .affirmation-line::before{content:'✦ ';font-style:normal;opacity:0.5;font-size:11px}
+  .affirmations-edit-area{display:none}
+  .affirmations-edit-area.open{display:block}
+  .affirmation-input{width:100%;padding:8px 10px;border:1.5px solid #C4B8E8;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--white);outline:none;margin-bottom:8px;font-style:italic}
+  .affirmation-input:focus{border-color:var(--lavender)}
+  .affirmations-save-btn{background:var(--lavender-dark);color:var(--white);border:none;border-radius:var(--radius-sm);padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+  /* PROJECTS */
+  .project-item{background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);padding:14px 16px;margin-bottom:8px}
+  .project-item-top{display:flex;align-items:flex-start;gap:10px}
+  .project-name{font-size:14px;font-weight:500;flex:1;line-height:1.3}
+  .project-status{font-size:11px;font-weight:600;padding:3px 9px;border-radius:50px;flex-shrink:0;margin-top:1px}
+  .project-status.active{background:#EEF4EE;color:var(--sage-dark)}
+  .project-status.paused{background:var(--clay-light);color:var(--clay-dark)}
+  .project-status.done{background:var(--lavender-light);color:var(--lavender-dark)}
+  .project-notes{font-size:12px;color:var(--text-mid);margin-top:6px;line-height:1.5}
+  .project-actions{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .project-action-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--text-light);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px;padding:0}
+  .project-action-btn:hover{color:var(--text)}
+  .add-project-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-light);font-size:13px;cursor:pointer;background:none;font-family:'DM Sans',sans-serif;width:100%;margin-top:4px}
+  .project-filter-row{display:flex;gap:6px;padding:12px 16px;overflow-x:auto;scrollbar-width:none}
+  .project-filter-btn{flex-shrink:0;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text-mid);font-family:'DM Sans',sans-serif;transition:all 0.2s}
+  .project-filter-btn.active{background:var(--text);color:var(--white);border-color:var(--text)}
+  .project-empty{text-align:center;padding:40px 16px;color:var(--text-light);font-size:14px}
+
+  /* PROJECT MODAL */
+  .status-picks{display:flex;gap:8px;margin-bottom:16px}
+  .status-pick{flex:1;padding:8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center;transition:all 0.2s;background:var(--white);color:var(--text-mid)}
+  .status-pick.selected.active-pick{background:#EEF4EE;color:var(--sage-dark);border-color:var(--sage)}
+  .status-pick.selected.paused-pick{background:var(--clay-light);color:var(--clay-dark);border-color:var(--clay)}
+  .status-pick.selected.done-pick{background:var(--lavender-light);color:var(--lavender-dark);border-color:var(--lavender)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HOME -->
+  <div id="screen-home" class="screen active">
+    <div class="home-hero">
+      <div class="home-date" id="home-date"></div>
+      <div class="home-greeting serif" id="home-greeting"></div>
+      <div id="weather-area">
+        <div class="weather-pill" onclick="fetchWeather()">
+          <i class="ti ti-cloud-sun"></i>
+          <span id="weather-text">Tap to load weather</span>
+        </div>
+      </div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-label">✦ Today's summary</div>
+      <div class="ai-card-text" id="ai-summary">Loading your daily summary…</div>
+      <button class="ai-card-refresh" onclick="refreshSummary()"><i class="ti ti-refresh"></i> Refresh summary</button>
+    </div>
+    <!-- AFFIRMATIONS -->
+    <div class="affirmations-card">
+      <div class="affirmations-header">
+        <div class="affirmations-label">✦ My affirmations</div>
+        <button class="affirmations-edit-btn" onclick="toggleAffirmationsEdit()"><i class="ti ti-pencil" style="font-size:14px"></i> Edit</button>
+      </div>
+      <div id="affirmations-display">
+        <div class="affirmation-line" id="aff-line-0"></div>
+        <div class="affirmation-line" id="aff-line-1"></div>
+        <div class="affirmation-line" id="aff-line-2"></div>
+      </div>
+      <div class="affirmations-edit-area" id="affirmations-edit-area">
+        <input class="affirmation-input" id="aff-input-0" placeholder="e.g. I am strong and capable" maxlength="100">
+        <input class="affirmation-input" id="aff-input-1" placeholder="e.g. I choose progress over perfection" maxlength="100">
+        <input class="affirmation-input" id="aff-input-2" placeholder="e.g. I am proud of how far I've come" maxlength="100">
+        <button class="affirmations-save-btn" onclick="saveAffirmations()">Save</button>
+      </div>
+    </div>
+
+    <div class="progress-row">
+      <div class="stat-card">
+        <div class="stat-label">Habits done today</div>
+        <div class="stat-val" id="home-habits-done">0/5</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="home-habits-bar" style="width:0%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Self care steps</div>
+        <div class="stat-val" id="home-selfcare-done">0/8</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="home-selfcare-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="section-label">Still to do today</div>
+    <div id="todo-chips-container"></div>
+  </div>
+
+  <!-- SELF CARE -->
+  <div id="screen-selfcare" class="screen">
+    <div class="page-header">
+      <div class="page-title serif">Self Care</div>
+      <div class="page-sub" id="sc-date-sub"></div>
+    </div>
+    <div class="routine-tabs">
+      <button class="routine-tab active" onclick="switchRoutine('morning',this)">☀️ Morning</button>
+      <button class="routine-tab" onclick="switchRoutine('evening',this)">🌙 Evening</button>
+    </div>
+    <div style="padding:0 16px 10px;display:flex;align-items:center;justify-content:space-between">
+      <span id="sc-progress-text" style="font-size:13px;font-weight:600;color:var(--sage-dark)">0 of 0 complete</span>
+      <button class="reset-btn" onclick="resetRoutine()">↺ Reset</button>
+    </div>
+    <div id="routine-morning" class="routine-section active">
+      <div class="routine-group-title">Skin</div>
+      <div id="steps-morning-skin"></div>
+      <div class="routine-group-title">Hair</div>
+      <div id="steps-morning-hair"></div>
+    </div>
+    <div id="routine-evening" class="routine-section">
+      <div class="routine-group-title">Skin</div>
+      <div id="steps-evening-skin"></div>
+      <div class="routine-group-title">Hair</div>
+      <div id="steps-evening-hair"></div>
+    </div>
+  </div>
+
+  <!-- MEAL PLAN -->
+  <div id="screen-meals" class="screen">
+    <div class="page-header">
+      <div class="page-title serif">Meal Planning</div>
+      <div class="page-sub">Weekly plan & grocery list</div>
+    </div>
+    <div style="padding:14px 16px 0">
+      <div class="tab-toggle">
+        <button class="tab-toggle-btn active" onclick="switchMealTab('plan')">Weekly Plan</button>
+        <button class="tab-toggle-btn" onclick="switchMealTab('grocery')">Grocery List</button>
+        <button class="tab-toggle-btn" onclick="switchMealTab('favs')">Favourites</button>
+      </div>
+    </div>
+    <div id="meal-approval-banner" class="approval-banner">
+      <i class="ti ti-sparkles" style="color:var(--clay);margin-top:2px;flex-shrink:0"></i>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--clay-dark);margin-bottom:4px">Your AI meal plan is ready!</div>
+        <div style="font-size:12px;color:var(--clay-dark)">Review the plan below, then approve to generate your grocery list.</div>
+        <div class="approval-actions">
+          <button class="approve-btn yes" onclick="approvePlan()">✓ Approve</button>
+          <button class="approve-btn no" onclick="generateMealPlan()">↺ Regenerate</button>
+        </div>
+      </div>
+    </div>
+    <div id="meal-tab-plan">
+      <div style="padding:0 16px 8px">
+        <button class="generate-btn" id="gen-btn" onclick="generateMealPlan()">
+          <i class="ti ti-sparkles"></i> Generate this week's plan
+        </button>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <span class="goal-chip active">Weight loss</span>
+          <span class="goal-chip active">Lactose light</span>
+          <span class="goal-chip active">High protein</span>
+          <span class="goal-chip active">No avocado/egg</span>
+          <span class="goal-chip">Husband: meat &amp; veg</span>
+        </div>
+      </div>
+      <div class="week-plan" id="week-plan-container">
+        <div style="text-align:center;padding:32px 0;color:var(--text-light);font-size:14px">
+          <i class="ti ti-salad" style="font-size:36px;display:block;margin-bottom:8px"></i>
+          Tap "Generate" to build your AI meal plan
+        </div>
+      </div>
+    </div>
+    <div id="meal-tab-grocery" style="display:none">
+      <div id="grocery-list-container">
+        <div style="text-align:center;padding:48px 16px;color:var(--text-light);font-size:14px">
+          <i class="ti ti-shopping-cart" style="font-size:36px;display:block;margin-bottom:8px"></i>
+          Approve a meal plan first to generate your grocery list
+        </div>
+      </div>
+    </div>
+    <div id="meal-tab-favs" style="display:none">
+      <div class="favs-section">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:12px">Heart any meal in your plan to save it here. The AI will prioritise these week over week.</div>
+        <div id="favs-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HABITS -->
+  <div id="screen-habits" class="screen">
+    <div class="page-header">
+      <div class="page-title serif">Habit Tracker</div>
+      <div class="page-sub">90-day challenge</div>
+    </div>
+    <div style="padding:14px 16px 0">
+      <div class="habit-streak-banner">
+        <i class="ti ti-flame" style="font-size:28px;color:var(--clay)"></i>
+        <div>
+          <div style="font-size:20px;font-weight:700;color:var(--clay-dark)" id="streak-count">0</div>
+          <div style="font-size:13px;color:var(--clay-dark)">day streak 🔥 Keep it up!</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div style="font-size:20px;font-weight:700;color:var(--clay-dark)" id="day90-count">Day 1</div>
+          <div style="font-size:11px;color:var(--clay-dark)">of 90</div>
+        </div>
+      </div>
+      <div class="habit-90-day">
+        <div class="habit-90-label">90-day progress</div>
+        <div class="habit-90-grid" id="grid90"></div>
+      </div>
+      <div id="habits-list"></div>
+      <button class="add-habit-btn" onclick="openAddHabit()">
+        <i class="ti ti-plus"></i> Add a new habit
+      </button>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div id="screen-projects" class="screen">
+    <div class="page-header">
+      <div class="page-title serif">Projects</div>
+      <div class="page-sub">Everything you're working on</div>
+    </div>
+    <div class="project-filter-row">
+      <button class="project-filter-btn active" onclick="filterProjects('all',this)">All</button>
+      <button class="project-filter-btn" onclick="filterProjects('active',this)">Active</button>
+      <button class="project-filter-btn" onclick="filterProjects('paused',this)">Paused</button>
+      <button class="project-filter-btn" onclick="filterProjects('done',this)">Done</button>
+    </div>
+    <div style="padding:0 16px 16px">
+      <div id="projects-list"></div>
+      <button class="add-project-btn" onclick="openAddProject()">
+        <i class="ti ti-plus"></i> Add a new project
+      </button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nav-item active" onclick="switchScreen('home')" id="nav-home">
+      <i class="ti ti-home"></i><span>Home</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="switchScreen('selfcare')" id="nav-selfcare">
+      <i class="ti ti-sparkles"></i><span>Self Care</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="switchScreen('meals')" id="nav-meals">
+      <i class="ti ti-salad"></i><span>Meals</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="switchScreen('habits')" id="nav-habits">
+      <i class="ti ti-checkbox"></i><span>Habits</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="switchScreen('projects')" id="nav-projects">
+      <i class="ti ti-folder"></i><span>Projects</span><div class="nav-dot"></div>
+    </button>
+  </nav>
+</div>
+
+<!-- Add Habit Modal -->
+<div class="modal-overlay" id="habit-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title serif">New habit</div>
+    <label class="form-label">Habit name</label>
+    <input class="form-input" id="habit-name-input" placeholder="e.g. Drink 2L of water">
+    <label class="form-label">Daily goal / note</label>
+    <input class="form-input" id="habit-goal-input" placeholder="e.g. Every morning before coffee">
+    <label class="form-label">Icon colour</label>
+    <div class="color-picks">
+      <div class="color-pick selected" style="background:#7A9E7E" data-color="#7A9E7E" onclick="selectColor(this)"></div>
+      <div class="color-pick" style="background:#D4847A" data-color="#D4847A" onclick="selectColor(this)"></div>
+      <div class="color-pick" style="background:#C4956A" data-color="#C4956A" onclick="selectColor(this)"></div>
+      <div class="color-pick" style="background:#9B8EC4" data-color="#9B8EC4" onclick="selectColor(this)"></div>
+      <div class="color-pick" style="background:#378ADD" data-color="#378ADD" onclick="selectColor(this)"></div>
+    </div>
+    <button class="modal-save" onclick="saveHabit()">Save habit</button>
+  </div>
+</div>
+
+<!-- Add Project Modal -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title serif" id="project-modal-title">New project</div>
+    <input type="hidden" id="project-edit-id">
+    <label class="form-label">Project name</label>
+    <input class="form-input" id="project-name-input" placeholder="e.g. Wellness App">
+    <label class="form-label">Notes (optional)</label>
+    <input class="form-input" id="project-notes-input" placeholder="e.g. Building in HTML, hosted on GitHub Pages">
+    <label class="form-label">Status</label>
+    <div class="status-picks">
+      <button class="status-pick active-pick selected" data-status="active" onclick="selectProjectStatus(this)">🟢 Active</button>
+      <button class="status-pick paused-pick" data-status="paused" onclick="selectProjectStatus(this)">⏸ Paused</button>
+      <button class="status-pick done-pick" data-status="done" onclick="selectProjectStatus(this)">✓ Done</button>
+    </div>
+    <button class="modal-save" onclick="saveProject()">Save project</button>
+  </div>
+</div>
+const CLAUDE_MODEL='claude-sonnet-4-20250514';
+
+const DEFAULT_ROUTINES={
+  morning:{
+    skin:[
+      {id:'m-s1',name:'Cleanse face',note:'Gentle foam or gel cleanser'},
+      {id:'m-s2',name:'Tone',note:'Alcohol-free toner'},
+      {id:'m-s3',name:'Vitamin C serum',note:'Pat in gently'},
+      {id:'m-s4',name:'Moisturiser',note:'Lightweight, non-comedogenic'},
+      {id:'m-s5',name:'SPF 30+',note:'Apply last — never skip!'},
+    ],
+    hair:[
+      {id:'m-h1',name:'Scalp massage',note:'2 min to stimulate growth'},
+      {id:'m-h2',name:'Style / protect',note:'Heat protectant if needed'},
+    ]
+  },
+  evening:{
+    skin:[
+      {id:'e-s1',name:'Remove makeup',note:'Micellar water or cleansing balm'},
+      {id:'e-s2',name:'Double cleanse',note:'Foaming second cleanse'},
+      {id:'e-s3',name:'Exfoliate (2–3x/week)',note:'AHA or BHA — not every night'},
+      {id:'e-s4',name:'Serum / retinol',note:'Apply to dry skin'},
+      {id:'e-s5',name:'Eye cream',note:'Pat gently with ring finger'},
+      {id:'e-s6',name:'Night moisturiser',note:'Richer formula than morning'},
+    ],
+    hair:[
+      {id:'e-h1',name:'Brush & detangle',note:'Start from ends upward'},
+      {id:'e-h2',name:'Overnight treatment',note:'Silk bonnet or leave-in oil if needed'},
+    ]
+  }
+};
+
+const DEFAULT_HABITS=[
+  {id:'h1',name:'Drink 2L of water',goal:'Track with a marked bottle',color:'#378ADD',icon:'ti-droplet'},
+  {id:'h2',name:'30 min movement',goal:'Walk, gym, yoga — anything counts',color:'#7A9E7E',icon:'ti-run'},
+  {id:'h3',name:'No late-night snacking',goal:'Kitchen closes at 8pm',color:'#9B8EC4',icon:'ti-moon'},
+  {id:'h4',name:'Daily vitamins',goal:'Take with breakfast',color:'#C4956A',icon:'ti-pill'},
+  {id:'h5',name:'10 min mindfulness',goal:'Morning or before bed',color:'#D4847A',icon:'ti-heart'},
+];
+
+let state={currentRoutine:'morning',habits:[],habitChecks:{},routineChecks:{},mealPlan:null,groceryChecks:{},favourites:[],planApproved:false,selectedColor:'#7A9E7E',startDate:new Date(),projects:[],selectedProjectStatus:'active',currentProjectFilter:'all',affirmations:[]};
+
+function save(){try{localStorage.setItem('wellness_v3',JSON.stringify({habits:state.habits,habitChecks:state.habitChecks,routineChecks:state.routineChecks,mealPlan:state.mealPlan,groceryChecks:state.groceryChecks,favourites:state.favourites,planApproved:state.planApproved,startDate:state.startDate.toISOString(),projects:state.projects,affirmations:state.affirmations}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('wellness_v3')||'{}');if(d.habits)state.habits=d.habits;if(d.habitChecks)state.habitChecks=d.habitChecks;if(d.routineChecks)state.routineChecks=d.routineChecks;if(d.mealPlan)state.mealPlan=d.mealPlan;if(d.groceryChecks)state.groceryChecks=d.groceryChecks;if(d.favourites)state.favourites=d.favourites;if(d.planApproved!==undefined)state.planApproved=d.planApproved;if(d.startDate)state.startDate=new Date(d.startDate);if(d.projects)state.projects=d.projects;if(d.affirmations)state.affirmations=d.affirmations;}catch(e){}}
+
+function getTodayKey(){return new Date().toISOString().split('T')[0];}
+function getAllStepIds(){const ids=[];Object.values(DEFAULT_ROUTINES).forEach(r=>{Object.values(r).forEach(arr=>arr.forEach(s=>ids.push(s.id)));});return ids;}
+
+function switchScreen(s){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  document.getElementById('nav-'+s).classList.add('active');
+  if(s==='home'){updateHome();renderAffirmations();}
+  if(s==='projects')renderProjects();
+}
+
+function initDate(){
+  const now=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('home-date').textContent=`${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+  const h=now.getHours();
+  document.getElementById('home-greeting').textContent=h<12?'Good morning ✨':h<17?'Good afternoon ☀️':'Good evening 🌙';
+  const sub=document.getElementById('sc-date-sub');
+  if(sub)sub.textContent=`${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+}
+
+async function fetchWeather(){
+  const el=document.getElementById('weather-text');
+  el.textContent='Locating…';
+  if(!navigator.geolocation){el.textContent='Location unavailable';return;}
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    try{
+      const{latitude:lat,longitude:lon}=pos.coords;
+      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius`);
+      const d=await r.json();
+      const temp=Math.round(d.current_weather.temperature);
+      const code=d.current_weather.weathercode;
+      const desc=code<=1?'Clear':code<=3?'Partly cloudy':code<=48?'Foggy':code<=67?'Rainy':code<=77?'Snowy':'Stormy';
+      const icon=code<=1?'ti-sun':code<=3?'ti-cloud-sun':code<=48?'ti-cloud':code<=67?'ti-cloud-rain':'ti-storm';
+      document.getElementById('weather-area').innerHTML=`<div class="weather-pill"><i class="ti ${icon}" style="color:var(--clay)"></i><span class="weather-temp">${temp}°C</span><span style="color:var(--text-mid);font-size:13px">&nbsp;${desc}</span></div>`;
+    }catch(e){el.textContent='Weather unavailable';}
+  },()=>{el.textContent='Location denied';});
+}
+
+async function refreshSummary(){
+  const el=document.getElementById('ai-summary');
+  el.innerHTML='<span class="loading-dots"><span></span><span></span><span></span></span>';
+  const todayKey=getTodayKey();
+  const hChecks=state.habitChecks[todayKey]||{};
+  const doneH=state.habits.filter(h=>hChecks[h.id]).length;
+  const rChecks=state.routineChecks[todayKey]||{};
+  const doneSteps=Object.values(rChecks).filter(Boolean).length;
+  const totalSteps=getAllStepIds().length;
+  const prompt=`You are a warm, encouraging wellness coach. Today is ${new Date().toDateString()}. The user has completed ${doneSteps} of ${totalSteps} self-care routine steps and ${doneH} of ${state.habits.length} habits today. ${state.planApproved?'They have an approved meal plan for the week.':'They haven\'t generated a meal plan yet.'} Write a SHORT (2-3 sentences max) personalized daily summary that is warm, motivating and specific. Be human and conversational. No bullet points.`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:200,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    el.textContent=d.content[0].text;
+  }catch(e){el.textContent="You're doing great — keep checking off your goals one step at a time! 🌿";}
+}
+
+function updateHome(){
+  const todayKey=getTodayKey();
+  const hChecks=state.habitChecks[todayKey]||{};
+  const doneH=state.habits.filter(h=>hChecks[h.id]).length;
+  const totalH=Math.max(state.habits.length,1);
+  document.getElementById('home-habits-done').textContent=`${doneH}/${state.habits.length}`;
+  document.getElementById('home-habits-bar').style.width=`${Math.round(doneH/totalH*100)}%`;
+  const rChecks=state.routineChecks[todayKey]||{};
+  const totalS=getAllStepIds().length;
+  const doneS=Object.values(rChecks).filter(Boolean).length;
+  document.getElementById('home-selfcare-done').textContent=`${doneS}/${totalS}`;
+  document.getElementById('home-selfcare-bar').style.width=`${Math.round(doneS/Math.max(totalS,1)*100)}%`;
+  const c=document.getElementById('todo-chips-container');c.innerHTML='';
+  const undoneH=state.habits.filter(h=>!hChecks[h.id]);
+  if(undoneH.length){const ch=document.createElement('div');ch.className='todo-chip';ch.onclick=()=>switchScreen('habits');ch.innerHTML=`<div class="todo-chip-icon" style="background:#EEF4EE"><i class="ti ti-checkbox" style="color:#4A6B4E"></i></div><span class="todo-chip-text">Habits remaining</span><span class="todo-chip-count">${undoneH.length} left</span>`;c.appendChild(ch);}
+  const undoneS=totalS-doneS;
+  if(undoneS>0){const ch=document.createElement('div');ch.className='todo-chip';ch.onclick=()=>switchScreen('selfcare');ch.innerHTML=`<div class="todo-chip-icon" style="background:#FAEEED"><i class="ti ti-sparkles" style="color:#D4847A"></i></div><span class="todo-chip-text">Self care steps</span><span class="todo-chip-count">${undoneS} left</span>`;c.appendChild(ch);}
+  if(!state.planApproved){const ch=document.createElement('div');ch.className='todo-chip';ch.onclick=()=>switchScreen('meals');ch.innerHTML=`<div class="todo-chip-icon" style="background:#FBF3EB"><i class="ti ti-salad" style="color:#C4956A"></i></div><span class="todo-chip-text">Generate meal plan</span><span class="todo-chip-count">Not done</span>`;c.appendChild(ch);}
+  if(c.children.length===0){c.innerHTML='<div style="text-align:center;padding:24px;color:var(--text-light);font-size:14px">🎉 All done for today — amazing!</div>';}
+}
+
+function renderRoutine(type){
+  const todayKey=getTodayKey();
+  const checks=state.routineChecks[todayKey]||{};
+  ['skin','hair'].forEach(group=>{
+    const el=document.getElementById(`steps-${type}-${group}`);if(!el)return;el.innerHTML='';
+    DEFAULT_ROUTINES[type][group].forEach(step=>{
+      const done=checks[step.id]||false;
+      const div=document.createElement('div');div.className='step-item'+(done?' done':'');
+      div.innerHTML=`<div class="step-check">${done?'<i class="ti ti-check"></i>':''}</div><div style="flex:1"><div class="step-name">${step.name}</div><div class="step-note">${step.note}</div></div>`;
+      div.onclick=()=>{const k=getTodayKey();if(!state.routineChecks[k])state.routineChecks[k]={};state.routineChecks[k][step.id]=!state.routineChecks[k][step.id];save();renderRoutine(type);};
+      el.appendChild(div);
+    });
+  });
+  const allIds=getAllStepIds();const checks2=state.routineChecks[getTodayKey()]||{};const done=allIds.filter(id=>checks2[id]).length;
+  const pt=document.getElementById('sc-progress-text');if(pt)pt.textContent=`${done} of ${allIds.length} complete`;
+}
+
+function switchRoutine(type,btn){
+  state.currentRoutine=type;
+  document.querySelectorAll('.routine-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.routine-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('routine-'+type).classList.add('active');
+  renderRoutine(type);
+}
+
+function resetRoutine(){if(!confirm('Reset all steps for today?'))return;state.routineChecks[getTodayKey()]={};save();renderRoutine(state.currentRoutine);}
+
+function switchMealTab(tab){
+  ['plan','grocery','favs'].forEach(t=>{const el=document.getElementById('meal-tab-'+t);if(el)el.style.display=t===tab?'block':'none';});
+  document.querySelectorAll('.tab-toggle-btn').forEach((b,i)=>b.classList.toggle('active',['plan','grocery','favs'][i]===tab));
+  if(tab==='favs')renderFavs();
+  if(tab==='grocery')renderGrocery();
+}
+
+async function generateMealPlan(){
+  const btn=document.getElementById('gen-btn');btn.disabled=true;
+  btn.innerHTML='<span class="loading-dots"><span></span><span></span><span></span></span>';
+  const favNames=state.favourites.map(f=>f.name).join(', ')||'none saved yet';
+  const prompt=`You are a nutrition-focused meal planner. Create a weekly meal plan (Monday to Sunday) for a woman trying to lose weight.\n\nUSER PROFILE:\n- Goal: Lose 15 lbs by September\n- Lactose intolerant — minimize cheese/dairy\n- No avocado, no eggs (or minimal)\n- Volume eater: needs 3 meals + snacks\n- Priority: high protein, nutrient variety, low calories (~1400–1600 cal/day)\n- Husband: meat, fruit & vegetables dominant\n- Make-ahead breakfast (one prep for whole week)\n- Make-ahead lunch (one prep for whole week)\n- Variety in dinners\n- Sweet treats and healthy snacks for the week\n- Favourite meals to consider: ${favNames}\n\nReturn ONLY valid JSON (no markdown, no explanation):\n{"makeAheadBreakfast":{"name":"...","description":"...","protein":"...","calories":"..."},"makeAheadLunch":{"name":"...","description":"...","protein":"...","calories":"..."},"treats":[{"name":"...","calories":"..."}],"snacks":[{"name":"...","calories":"..."},{"name":"...","calories":"..."}],"dinners":[{"day":"Monday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."},{"day":"Tuesday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."},{"day":"Wednesday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."},{"day":"Thursday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."},{"day":"Friday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."},{"day":"Saturday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."},{"day":"Sunday","name":"...","description":"...","protein":"...","calories":"...","husbandNote":"..."}],"groceryList":{"produce":["..."],"protein":["..."],"pantry":["..."],"other":["..."]}}`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:2500,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    let text=d.content[0].text.replace(/```json|```/g,'').trim();
+    state.mealPlan=JSON.parse(text);state.planApproved=false;save();
+    renderMealPlan();
+    document.getElementById('meal-approval-banner').classList.add('show');
+  }catch(e){document.getElementById('week-plan-container').innerHTML='<div style="text-align:center;padding:24px;color:var(--blush)">Something went wrong — please try again.</div>';}
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-sparkles"></i> Regenerate plan';
+}
+
+function isFav(name){return state.favourites.some(f=>f.name===name);}
+function toggleFav(name,btn){
+  if(isFav(name)){state.favourites=state.favourites.filter(f=>f.name!==name);btn.classList.remove('active');}
+  else{state.favourites.push({name,savedAt:new Date().toISOString()});btn.classList.add('active');}
+  save();
+}
+
+function renderMealPlan(){
+  if(!state.mealPlan)return;
+  const m=state.mealPlan;const c=document.getElementById('week-plan-container');c.innerHTML='';
+  const maCard=document.createElement('div');maCard.className='card';
+  maCard.innerHTML=`<div style="font-size:12px;font-weight:600;letter-spacing:0.07em;color:var(--text-light);text-transform:uppercase;margin-bottom:10px">📦 Make-ahead this Sunday</div>
+  <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:600">Breakfast</div><div style="font-size:14px;margin:2px 0">${m.makeAheadBreakfast.name}</div><div style="font-size:12px;color:var(--text-light)">${m.makeAheadBreakfast.description}</div></div><button class="fav-btn${isFav(m.makeAheadBreakfast.name)?' active':''}" onclick="toggleFav('${m.makeAheadBreakfast.name}',this)"><i class="ti ti-heart" style="font-size:18px"></i></button></div><div style="font-size:11px;color:var(--sage-dark);margin-top:4px">~${m.makeAheadBreakfast.calories} cal · ${m.makeAheadBreakfast.protein} protein</div></div>
+  <div style="border-top:1px solid var(--border);padding-top:12px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:600">Lunch</div><div style="font-size:14px;margin:2px 0">${m.makeAheadLunch.name}</div><div style="font-size:12px;color:var(--text-light)">${m.makeAheadLunch.description}</div></div><button class="fav-btn${isFav(m.makeAheadLunch.name)?' active':''}" onclick="toggleFav('${m.makeAheadLunch.name}',this)"><i class="ti ti-heart" style="font-size:18px"></i></button></div><div style="font-size:11px;color:var(--sage-dark);margin-top:4px">~${m.makeAheadLunch.calories} cal · ${m.makeAheadLunch.protein} protein</div></div>`;
+  c.appendChild(maCard);
+  if(m.snacks||m.treats){
+    const stCard=document.createElement('div');stCard.className='card';
+    let html=`<div style="font-size:12px;font-weight:600;letter-spacing:0.07em;color:var(--text-light);text-transform:uppercase;margin-bottom:10px">🍫 Snacks & Treats</div>`;
+    (m.snacks||[]).forEach(s=>{html+=`<div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)"><span>${s.name}</span><span style="color:var(--sage-dark)">${s.calories} cal</span></div>`;});
+    (m.treats||[]).forEach(t=>{html+=`<div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)"><span>✨ ${t.name}</span><span style="color:var(--clay)">${t.calories} cal</span></div>`;});
+    stCard.innerHTML=html;c.appendChild(stCard);
+  }
+  const dinLabel=document.createElement('div');dinLabel.className='section-label';dinLabel.style.padding='12px 0 6px';dinLabel.textContent='Weeknight Dinners';c.appendChild(dinLabel);
+  (m.dinners||[]).forEach(din=>{
+    const dc=document.createElement('div');dc.className='day-card';
+    dc.innerHTML=`<div class="day-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('i').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(180deg)':''"><div><div class="day-name">${din.day}</div><div class="day-meals-preview">${din.name}</div></div><i class="ti ti-chevron-down" style="font-size:16px;color:var(--text-light)"></i></div>
+    <div class="day-body"><div class="meal-row"><div style="flex:1"><div style="font-size:14px;font-weight:500">${din.name}</div><div style="font-size:12px;color:var(--text-light);margin-top:2px">${din.description}</div>${din.husbandNote?`<div style="font-size:11px;color:var(--sage-dark);margin-top:3px">👨 Husband: ${din.husbandNote}</div>`:''}</div><button class="fav-btn${isFav(din.name)?' active':''}" onclick="toggleFav('${din.name}',this)"><i class="ti ti-heart" style="font-size:18px"></i></button></div><div style="font-size:11px;color:var(--sage-dark);padding-top:6px">~${din.calories} cal · ${din.protein} protein</div></div>`;
+    c.appendChild(dc);
+  });
+}
+
+function approvePlan(){
+  state.planApproved=true;save();
+  document.getElementById('meal-approval-banner').classList.remove('show');
+  const banner=document.createElement('div');
+  banner.style.cssText='background:var(--sage-light);border-radius:var(--radius-sm);padding:10px 14px;margin:0 16px 12px;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--sage-dark)';
+  banner.innerHTML='<i class="ti ti-circle-check"></i> Plan approved! Your grocery list is ready.';
+  document.getElementById('meal-tab-plan').prepend(banner);
+  renderGrocery();
+}
+
+function renderGrocery(){
+  const c=document.getElementById('grocery-list-container');
+  if(!state.planApproved||!state.mealPlan){c.innerHTML='<div style="text-align:center;padding:48px 16px;color:var(--text-light);font-size:14px"><i class="ti ti-shopping-cart" style="font-size:36px;display:block;margin-bottom:8px"></i>Approve a meal plan first</div>';return;}
+  const gl=state.mealPlan.groceryList;c.innerHTML='';
+  const wrapper=document.createElement('div');wrapper.className='grocery-section';
+  let html='';
+  const cats={produce:'🥦 Produce',protein:'🥩 Protein',pantry:'🥫 Pantry',other:'🛒 Other'};
+  Object.entries(cats).forEach(([key,label])=>{
+    if(gl[key]&&gl[key].length){
+      html+=`<div class="grocery-cat">${label}</div>`;
+      gl[key].forEach((item,i)=>{
+        const gKey=`${key}-${i}`;const checked=state.groceryChecks[gKey]||false;
+        html+=`<div class="grocery-item${checked?' checked':''}" onclick="toggleGrocery('${gKey}',this)"><div class="grocery-check">${checked?'<i class="ti ti-check"></i>':''}</div><span>${item}</span></div>`;
+      });
+    }
+  });
+  wrapper.innerHTML=html;c.appendChild(wrapper);
+}
+
+function toggleGrocery(key,el){
+  state.groceryChecks[key]=!state.groceryChecks[key];save();
+  el.classList.toggle('checked');
+  const check=el.querySelector('.grocery-check');
+  check.innerHTML=state.groceryChecks[key]?'<i class="ti ti-check"></i>':'';
+}
+
+function renderFavs(){
+  const c=document.getElementById('favs-list');c.innerHTML='';
+  if(!state.favourites.length){c.innerHTML='<div style="text-align:center;padding:32px 0;color:var(--text-light);font-size:13px">Heart any meal in your plan to save it here.</div>';return;}
+  state.favourites.forEach((f,i)=>{
+    const card=document.createElement('div');card.className='fav-recipe-card';
+    card.innerHTML=`<i class="ti ti-heart"></i><span class="fav-recipe-name">${f.name}</span><button class="fav-remove" onclick="state.favourites.splice(${i},1);save();renderFavs()"><i class="ti ti-x"></i></button>`;
+    c.appendChild(card);
+  });
+}
+
+function renderHabits(){
+  const c=document.getElementById('habits-list');c.innerHTML='';
+  const todayKey=getTodayKey();const checks=state.habitChecks[todayKey]||{};
+  state.habits.forEach(h=>{
+    const done=checks[h.id]||false;
+    const div=document.createElement('div');div.className='habit-item';
+    const today=new Date();let weekDots='';
+    for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const ch=state.habitChecks[k]||{};const dn=ch[h.id];const isT=i===0;weekDots+=`<div class="habit-day-dot${dn?' done':isT?' today':''}"></div>`;}
+    div.innerHTML=`<div class="habit-top"><div class="habit-icon-wrap" style="background:${h.color}22"><i class="ti ${h.icon||'ti-star'}" style="color:${h.color}"></i></div><div class="habit-info"><div class="habit-name">${h.name}</div><div class="habit-goal">${h.goal}</div></div><button class="habit-check-btn${done?' done':''}" onclick="toggleHabit('${h.id}')"><i class="ti ti-check"></i></button></div><div class="habit-week">${weekDots}</div>`;
+    c.appendChild(div);
+  });
+  updateStreakAndDay();
+}
+
+function toggleHabit(id){
+  const k=getTodayKey();if(!state.habitChecks[k])state.habitChecks[k]={};
+  state.habitChecks[k][id]=!state.habitChecks[k][id];save();renderHabits();
+}
+
+function updateStreakAndDay(){
+  const today=new Date();
+  const diff=Math.floor((today-new Date(state.startDate))/(1000*60*60*24))+1;
+  const d90=document.getElementById('day90-count');if(d90)d90.textContent=`Day ${Math.min(diff,90)}`;
+  let streak=0;
+  for(let i=0;i<90;i++){const d=new Date(today);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const ch=state.habitChecks[k]||{};if(state.habits.filter(h=>ch[h.id]).length>0)streak++;else if(i>0)break;}
+  const sc=document.getElementById('streak-count');if(sc)sc.textContent=streak;
+  const c=document.getElementById('grid90');if(!c)return;c.innerHTML='';
+  for(let i=89;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const ch=state.habitChecks[k]||{};const done=state.habits.filter(h=>ch[h.id]).length>0;const cell=document.createElement('div');cell.className='h90-cell'+(done?' done':i===0?' today':'');c.appendChild(cell);}
+}
+
+function openAddHabit(){document.getElementById('habit-modal').classList.add('open');}
+function closeHabitModal(){document.getElementById('habit-modal').classList.remove('open');}
+document.getElementById('habit-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeHabitModal();});
+function selectColor(el){document.querySelectorAll('.color-pick').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');state.selectedColor=el.dataset.color;}
+const iconMap={'#7A9E7E':'ti-leaf','#D4847A':'ti-heart','#C4956A':'ti-sun','#9B8EC4':'ti-moon','#378ADD':'ti-droplet'};
+function saveHabit(){
+  const name=document.getElementById('habit-name-input').value.trim();
+  const goal=document.getElementById('habit-goal-input').value.trim();
+  if(!name)return;
+  state.habits.push({id:'h'+Date.now(),name,goal:goal||'Daily',color:state.selectedColor,icon:iconMap[state.selectedColor]||'ti-star'});
+  save();renderHabits();closeHabitModal();
+  document.getElementById('habit-name-input').value='';document.getElementById('habit-goal-input').value='';
+}
+
+// AFFIRMATIONS
+function renderAffirmations(){
+  state.affirmations.forEach((text,i)=>{
+    const el=document.getElementById('aff-line-'+i);
+    if(el)el.textContent=text||'';
+    const input=document.getElementById('aff-input-'+i);
+    if(input)input.value=text||'';
+  });
+}
+function toggleAffirmationsEdit(){
+  const area=document.getElementById('affirmations-edit-area');
+  const display=document.getElementById('affirmations-display');
+  const isOpen=area.classList.contains('open');
+  area.classList.toggle('open',!isOpen);
+  display.style.display=isOpen?'block':'none';
+  if(!isOpen){state.affirmations.forEach((t,i)=>{const inp=document.getElementById('aff-input-'+i);if(inp)inp.value=t;});}
+}
+function saveAffirmations(){
+  [0,1,2].forEach(i=>{const inp=document.getElementById('aff-input-'+i);if(inp)state.affirmations[i]=inp.value.trim();});
+  save();renderAffirmations();
+  document.getElementById('affirmations-edit-area').classList.remove('open');
+  document.getElementById('affirmations-display').style.display='block';
+}
+
+// PROJECTS
+function renderProjects(){
+  const c=document.getElementById('projects-list');c.innerHTML='';
+  const filter=state.currentProjectFilter;
+  const filtered=filter==='all'?state.projects:state.projects.filter(p=>p.status===filter);
+  if(!filtered.length){
+    c.innerHTML=`<div class="project-empty"><i class="ti ti-folder-open" style="font-size:36px;display:block;margin-bottom:8px"></i>${filter==='all'?'No projects yet — add one below!':'No '+filter+' projects.'}</div>`;
+    return;
+  }
+  filtered.forEach(p=>{
+    const idx=state.projects.indexOf(p);
+    const div=document.createElement('div');div.className='project-item';
+    div.innerHTML=`<div class="project-item-top"><div class="project-name">${p.name}</div><span class="project-status ${p.status}">${p.status==='active'?'🟢 Active':p.status==='paused'?'⏸ Paused':'✓ Done'}</span></div>${p.notes?`<div class="project-notes">${p.notes}</div>`:''}<div class="project-actions"><button class="project-action-btn" onclick="editProject(${idx})"><i class="ti ti-pencil"></i> Edit</button><button class="project-action-btn" onclick="cycleStatus(${idx})"><i class="ti ti-refresh"></i> Change status</button><button class="project-action-btn" style="color:var(--blush)" onclick="deleteProject(${idx})"><i class="ti ti-trash"></i> Remove</button></div>`;
+    c.appendChild(div);
+  });
+}
+function filterProjects(filter,btn){
+  state.currentProjectFilter=filter;
+  document.querySelectorAll('.project-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects();
+}
+function cycleStatus(idx){
+  const order=['active','paused','done'];
+  const p=state.projects[idx];
+  p.status=order[(order.indexOf(p.status)+1)%3];
+  save();renderProjects();
+}
+function deleteProject(idx){
+  if(!confirm('Remove this project?'))return;
+  state.projects.splice(idx,1);save();renderProjects();
+}
+function openAddProject(){
+  document.getElementById('project-modal-title').textContent='New project';
+  document.getElementById('project-edit-id').value='';
+  document.getElementById('project-name-input').value='';
+  document.getElementById('project-notes-input').value='';
+  state.selectedProjectStatus='active';
+  document.querySelectorAll('.status-pick').forEach(b=>{b.classList.remove('selected');if(b.dataset.status==='active')b.classList.add('selected');});
+  document.getElementById('project-modal').classList.add('open');
+}
+function editProject(idx){
+  const p=state.projects[idx];
+  document.getElementById('project-modal-title').textContent='Edit project';
+  document.getElementById('project-edit-id').value=idx;
+  document.getElementById('project-name-input').value=p.name;
+  document.getElementById('project-notes-input').value=p.notes||'';
+  state.selectedProjectStatus=p.status;
+  document.querySelectorAll('.status-pick').forEach(b=>{b.classList.remove('selected');if(b.dataset.status===p.status)b.classList.add('selected');});
+  document.getElementById('project-modal').classList.add('open');
+}
+function selectProjectStatus(el){
+  document.querySelectorAll('.status-pick').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedProjectStatus=el.dataset.status;
+}
+function saveProject(){
+  const name=document.getElementById('project-name-input').value.trim();
+  if(!name)return;
+  const notes=document.getElementById('project-notes-input').value.trim();
+  const editId=document.getElementById('project-edit-id').value;
+  if(editId!==''){
+    state.projects[parseInt(editId)]={...state.projects[parseInt(editId)],name,notes,status:state.selectedProjectStatus};
+  } else {
+    state.projects.push({id:'p'+Date.now(),name,notes,status:state.selectedProjectStatus});
+  }
+  save();renderProjects();
+  document.getElementById('project-modal').classList.remove('open');
+}
+document.getElementById('project-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById('project-modal').classList.remove('open');});
+
+const DEFAULT_AFFIRMATIONS=['I am strong and capable','I choose progress over perfection','I am proud of how far I\'ve come'];
+
+// Init
+load();
+if(!state.habits.length)state.habits=DEFAULT_HABITS;
+if(!state.affirmations||!state.affirmations.length||state.affirmations.every(a=>!a))state.affirmations=DEFAULT_AFFIRMATIONS;
+initDate();
+renderRoutine('morning');renderRoutine('evening');
+renderHabits();
+if(state.mealPlan)renderMealPlan();
+updateHome();
+renderAffirmations();
+fetchWeather();
+setTimeout(refreshSummary,800);
+
+// Re-run when app comes back to foreground
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'){
+    initDate();
+    updateHome();
+    renderAffirmations();
+    fetchWeather();
+    refreshSummary();
+  }
+});
+</script>
+</body>
+</html>
