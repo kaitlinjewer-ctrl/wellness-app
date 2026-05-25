@@ -26,8 +26,8 @@
   .screen.active{display:block}
 
   .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 20px}
-  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 4px;border:none;background:none;color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;transition:color 0.2s}
-  .nav-item i{font-size:22px}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 2px;border:none;background:none;color:var(--text-light);font-family:'DM Sans',sans-serif;font-size:9px;font-weight:500;transition:color 0.2s}
+  .nav-item i{font-size:20px}
   .nav-item.active{color:var(--sage-dark)}
   .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--sage-dark);opacity:0;transition:opacity 0.2s}
   .nav-item.active .nav-dot{opacity:1}
@@ -175,6 +175,44 @@
   .loading-dots span:nth-child(2){animation-delay:0.2s}
   .loading-dots span:nth-child(3){animation-delay:0.4s}
   @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+  /* AFFIRMATIONS */
+  .affirmations-card{margin:0 16px 12px;background:var(--lavender-light);border-radius:var(--radius);border:1px solid #D8D0F0;padding:16px 18px}
+  .affirmations-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .affirmations-label{font-size:11px;letter-spacing:0.08em;color:var(--lavender-dark);text-transform:uppercase;font-weight:600}
+  .affirmations-edit-btn{background:none;border:none;cursor:pointer;color:var(--lavender-dark);font-size:13px;font-family:'DM Sans',sans-serif;opacity:0.7;display:flex;align-items:center;gap:4px;padding:0}
+  .affirmation-line{font-size:14px;color:var(--lavender-dark);line-height:1.5;padding:4px 0;font-style:italic}
+  .affirmation-line::before{content:'✦ ';font-style:normal;opacity:0.5;font-size:11px}
+  .affirmations-edit-area{display:none}
+  .affirmations-edit-area.open{display:block}
+  .affirmation-input{width:100%;padding:8px 10px;border:1.5px solid #C4B8E8;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--white);outline:none;margin-bottom:8px;font-style:italic}
+  .affirmation-input:focus{border-color:var(--lavender)}
+  .affirmations-save-btn{background:var(--lavender-dark);color:var(--white);border:none;border-radius:var(--radius-sm);padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+  /* PROJECTS */
+  .project-item{background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);padding:14px 16px;margin-bottom:8px}
+  .project-item-top{display:flex;align-items:flex-start;gap:10px}
+  .project-name{font-size:14px;font-weight:500;flex:1;line-height:1.3}
+  .project-status{font-size:11px;font-weight:600;padding:3px 9px;border-radius:50px;flex-shrink:0;margin-top:1px}
+  .project-status.active{background:#EEF4EE;color:var(--sage-dark)}
+  .project-status.paused{background:var(--clay-light);color:var(--clay-dark)}
+  .project-status.done{background:var(--lavender-light);color:var(--lavender-dark)}
+  .project-notes{font-size:12px;color:var(--text-mid);margin-top:6px;line-height:1.5}
+  .project-actions{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .project-action-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--text-light);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px;padding:0}
+  .project-action-btn:hover{color:var(--text)}
+  .add-project-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-light);font-size:13px;cursor:pointer;background:none;font-family:'DM Sans',sans-serif;width:100%;margin-top:4px}
+  .project-filter-row{display:flex;gap:6px;padding:12px 16px;overflow-x:auto;scrollbar-width:none}
+  .project-filter-btn{flex-shrink:0;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text-mid);font-family:'DM Sans',sans-serif;transition:all 0.2s}
+  .project-filter-btn.active{background:var(--text);color:var(--white);border-color:var(--text)}
+  .project-empty{text-align:center;padding:40px 16px;color:var(--text-light);font-size:14px}
+
+  /* PROJECT MODAL */
+  .status-picks{display:flex;gap:8px;margin-bottom:16px}
+  .status-pick{flex:1;padding:8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center;transition:all 0.2s;background:var(--white);color:var(--text-mid)}
+  .status-pick.selected.active-pick{background:#EEF4EE;color:var(--sage-dark);border-color:var(--sage)}
+  .status-pick.selected.paused-pick{background:var(--clay-light);color:var(--clay-dark);border-color:var(--clay)}
+  .status-pick.selected.done-pick{background:var(--lavender-light);color:var(--lavender-dark);border-color:var(--lavender)}
 </style>
 </head>
 <body>
@@ -197,6 +235,25 @@
       <div class="ai-card-text" id="ai-summary">Loading your daily summary…</div>
       <button class="ai-card-refresh" onclick="refreshSummary()"><i class="ti ti-refresh"></i> Refresh summary</button>
     </div>
+    <!-- AFFIRMATIONS -->
+    <div class="affirmations-card">
+      <div class="affirmations-header">
+        <div class="affirmations-label">✦ My affirmations</div>
+        <button class="affirmations-edit-btn" onclick="toggleAffirmationsEdit()"><i class="ti ti-pencil" style="font-size:14px"></i> Edit</button>
+      </div>
+      <div id="affirmations-display">
+        <div class="affirmation-line" id="aff-line-0"></div>
+        <div class="affirmation-line" id="aff-line-1"></div>
+        <div class="affirmation-line" id="aff-line-2"></div>
+      </div>
+      <div class="affirmations-edit-area" id="affirmations-edit-area">
+        <input class="affirmation-input" id="aff-input-0" placeholder="e.g. I am strong and capable" maxlength="100">
+        <input class="affirmation-input" id="aff-input-1" placeholder="e.g. I choose progress over perfection" maxlength="100">
+        <input class="affirmation-input" id="aff-input-2" placeholder="e.g. I am proud of how far I've come" maxlength="100">
+        <button class="affirmations-save-btn" onclick="saveAffirmations()">Save</button>
+      </div>
+    </div>
+
     <div class="progress-row">
       <div class="stat-card">
         <div class="stat-label">Habits done today</div>
@@ -330,6 +387,26 @@
     </div>
   </div>
 
+  <!-- PROJECTS -->
+  <div id="screen-projects" class="screen">
+    <div class="page-header">
+      <div class="page-title serif">Projects</div>
+      <div class="page-sub">Everything you're working on</div>
+    </div>
+    <div class="project-filter-row">
+      <button class="project-filter-btn active" onclick="filterProjects('all',this)">All</button>
+      <button class="project-filter-btn" onclick="filterProjects('active',this)">Active</button>
+      <button class="project-filter-btn" onclick="filterProjects('paused',this)">Paused</button>
+      <button class="project-filter-btn" onclick="filterProjects('done',this)">Done</button>
+    </div>
+    <div style="padding:0 16px 16px">
+      <div id="projects-list"></div>
+      <button class="add-project-btn" onclick="openAddProject()">
+        <i class="ti ti-plus"></i> Add a new project
+      </button>
+    </div>
+  </div>
+
   <!-- NAV -->
   <nav class="nav">
     <button class="nav-item active" onclick="switchScreen('home')" id="nav-home">
@@ -343,6 +420,9 @@
     </button>
     <button class="nav-item" onclick="switchScreen('habits')" id="nav-habits">
       <i class="ti ti-checkbox"></i><span>Habits</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="switchScreen('projects')" id="nav-projects">
+      <i class="ti ti-folder"></i><span>Projects</span><div class="nav-dot"></div>
     </button>
   </nav>
 </div>
@@ -368,7 +448,25 @@
   </div>
 </div>
 
-<script>
+<!-- Add Project Modal -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title serif" id="project-modal-title">New project</div>
+    <input type="hidden" id="project-edit-id">
+    <label class="form-label">Project name</label>
+    <input class="form-input" id="project-name-input" placeholder="e.g. Wellness App">
+    <label class="form-label">Notes (optional)</label>
+    <input class="form-input" id="project-notes-input" placeholder="e.g. Building in HTML, hosted on GitHub Pages">
+    <label class="form-label">Status</label>
+    <div class="status-picks">
+      <button class="status-pick active-pick selected" data-status="active" onclick="selectProjectStatus(this)">🟢 Active</button>
+      <button class="status-pick paused-pick" data-status="paused" onclick="selectProjectStatus(this)">⏸ Paused</button>
+      <button class="status-pick done-pick" data-status="done" onclick="selectProjectStatus(this)">✓ Done</button>
+    </div>
+    <button class="modal-save" onclick="saveProject()">Save project</button>
+  </div>
+</div>
 const CLAUDE_MODEL='claude-sonnet-4-20250514';
 
 const DEFAULT_ROUTINES={
@@ -409,10 +507,10 @@ const DEFAULT_HABITS=[
   {id:'h5',name:'10 min mindfulness',goal:'Morning or before bed',color:'#D4847A',icon:'ti-heart'},
 ];
 
-let state={currentRoutine:'morning',habits:[],habitChecks:{},routineChecks:{},mealPlan:null,groceryChecks:{},favourites:[],planApproved:false,selectedColor:'#7A9E7E',startDate:new Date()};
+let state={currentRoutine:'morning',habits:[],habitChecks:{},routineChecks:{},mealPlan:null,groceryChecks:{},favourites:[],planApproved:false,selectedColor:'#7A9E7E',startDate:new Date(),projects:[],selectedProjectStatus:'active',currentProjectFilter:'all',affirmations:['I am strong and capable','I choose progress over perfection','I am proud of how far I\'ve come']};
 
-function save(){try{localStorage.setItem('wellness_v3',JSON.stringify({habits:state.habits,habitChecks:state.habitChecks,routineChecks:state.routineChecks,mealPlan:state.mealPlan,groceryChecks:state.groceryChecks,favourites:state.favourites,planApproved:state.planApproved,startDate:state.startDate.toISOString()}))}catch(e){}}
-function load(){try{const d=JSON.parse(localStorage.getItem('wellness_v3')||'{}');if(d.habits)state.habits=d.habits;if(d.habitChecks)state.habitChecks=d.habitChecks;if(d.routineChecks)state.routineChecks=d.routineChecks;if(d.mealPlan)state.mealPlan=d.mealPlan;if(d.groceryChecks)state.groceryChecks=d.groceryChecks;if(d.favourites)state.favourites=d.favourites;if(d.planApproved!==undefined)state.planApproved=d.planApproved;if(d.startDate)state.startDate=new Date(d.startDate);}catch(e){}}
+function save(){try{localStorage.setItem('wellness_v3',JSON.stringify({habits:state.habits,habitChecks:state.habitChecks,routineChecks:state.routineChecks,mealPlan:state.mealPlan,groceryChecks:state.groceryChecks,favourites:state.favourites,planApproved:state.planApproved,startDate:state.startDate.toISOString(),projects:state.projects,affirmations:state.affirmations}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('wellness_v3')||'{}');if(d.habits)state.habits=d.habits;if(d.habitChecks)state.habitChecks=d.habitChecks;if(d.routineChecks)state.routineChecks=d.routineChecks;if(d.mealPlan)state.mealPlan=d.mealPlan;if(d.groceryChecks)state.groceryChecks=d.groceryChecks;if(d.favourites)state.favourites=d.favourites;if(d.planApproved!==undefined)state.planApproved=d.planApproved;if(d.startDate)state.startDate=new Date(d.startDate);if(d.projects)state.projects=d.projects;if(d.affirmations)state.affirmations=d.affirmations;}catch(e){}}
 
 function getTodayKey(){return new Date().toISOString().split('T')[0];}
 function getAllStepIds(){const ids=[];Object.values(DEFAULT_ROUTINES).forEach(r=>{Object.values(r).forEach(arr=>arr.forEach(s=>ids.push(s.id)));});return ids;}
@@ -422,7 +520,8 @@ function switchScreen(s){
   document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
   document.getElementById('nav-'+s).classList.add('active');
-  if(s==='home')updateHome();
+  if(s==='home'){updateHome();renderAffirmations();}
+  if(s==='projects')renderProjects();
 }
 
 function initDate(){
@@ -664,6 +763,101 @@ function saveHabit(){
   document.getElementById('habit-name-input').value='';document.getElementById('habit-goal-input').value='';
 }
 
+// AFFIRMATIONS
+function renderAffirmations(){
+  state.affirmations.forEach((text,i)=>{
+    const el=document.getElementById('aff-line-'+i);
+    if(el)el.textContent=text||'';
+    const input=document.getElementById('aff-input-'+i);
+    if(input)input.value=text||'';
+  });
+}
+function toggleAffirmationsEdit(){
+  const area=document.getElementById('affirmations-edit-area');
+  const display=document.getElementById('affirmations-display');
+  const isOpen=area.classList.contains('open');
+  area.classList.toggle('open',!isOpen);
+  display.style.display=isOpen?'block':'none';
+  if(!isOpen){state.affirmations.forEach((t,i)=>{const inp=document.getElementById('aff-input-'+i);if(inp)inp.value=t;});}
+}
+function saveAffirmations(){
+  [0,1,2].forEach(i=>{const inp=document.getElementById('aff-input-'+i);if(inp)state.affirmations[i]=inp.value.trim();});
+  save();renderAffirmations();
+  document.getElementById('affirmations-edit-area').classList.remove('open');
+  document.getElementById('affirmations-display').style.display='block';
+}
+
+// PROJECTS
+function renderProjects(){
+  const c=document.getElementById('projects-list');c.innerHTML='';
+  const filter=state.currentProjectFilter;
+  const filtered=filter==='all'?state.projects:state.projects.filter(p=>p.status===filter);
+  if(!filtered.length){
+    c.innerHTML=`<div class="project-empty"><i class="ti ti-folder-open" style="font-size:36px;display:block;margin-bottom:8px"></i>${filter==='all'?'No projects yet — add one below!':'No '+filter+' projects.'}</div>`;
+    return;
+  }
+  filtered.forEach(p=>{
+    const idx=state.projects.indexOf(p);
+    const div=document.createElement('div');div.className='project-item';
+    div.innerHTML=`<div class="project-item-top"><div class="project-name">${p.name}</div><span class="project-status ${p.status}">${p.status==='active'?'🟢 Active':p.status==='paused'?'⏸ Paused':'✓ Done'}</span></div>${p.notes?`<div class="project-notes">${p.notes}</div>`:''}<div class="project-actions"><button class="project-action-btn" onclick="editProject(${idx})"><i class="ti ti-pencil"></i> Edit</button><button class="project-action-btn" onclick="cycleStatus(${idx})"><i class="ti ti-refresh"></i> Change status</button><button class="project-action-btn" style="color:var(--blush)" onclick="deleteProject(${idx})"><i class="ti ti-trash"></i> Remove</button></div>`;
+    c.appendChild(div);
+  });
+}
+function filterProjects(filter,btn){
+  state.currentProjectFilter=filter;
+  document.querySelectorAll('.project-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects();
+}
+function cycleStatus(idx){
+  const order=['active','paused','done'];
+  const p=state.projects[idx];
+  p.status=order[(order.indexOf(p.status)+1)%3];
+  save();renderProjects();
+}
+function deleteProject(idx){
+  if(!confirm('Remove this project?'))return;
+  state.projects.splice(idx,1);save();renderProjects();
+}
+function openAddProject(){
+  document.getElementById('project-modal-title').textContent='New project';
+  document.getElementById('project-edit-id').value='';
+  document.getElementById('project-name-input').value='';
+  document.getElementById('project-notes-input').value='';
+  state.selectedProjectStatus='active';
+  document.querySelectorAll('.status-pick').forEach(b=>{b.classList.remove('selected');if(b.dataset.status==='active')b.classList.add('selected');});
+  document.getElementById('project-modal').classList.add('open');
+}
+function editProject(idx){
+  const p=state.projects[idx];
+  document.getElementById('project-modal-title').textContent='Edit project';
+  document.getElementById('project-edit-id').value=idx;
+  document.getElementById('project-name-input').value=p.name;
+  document.getElementById('project-notes-input').value=p.notes||'';
+  state.selectedProjectStatus=p.status;
+  document.querySelectorAll('.status-pick').forEach(b=>{b.classList.remove('selected');if(b.dataset.status===p.status)b.classList.add('selected');});
+  document.getElementById('project-modal').classList.add('open');
+}
+function selectProjectStatus(el){
+  document.querySelectorAll('.status-pick').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedProjectStatus=el.dataset.status;
+}
+function saveProject(){
+  const name=document.getElementById('project-name-input').value.trim();
+  if(!name)return;
+  const notes=document.getElementById('project-notes-input').value.trim();
+  const editId=document.getElementById('project-edit-id').value;
+  if(editId!==''){
+    state.projects[parseInt(editId)]={...state.projects[parseInt(editId)],name,notes,status:state.selectedProjectStatus};
+  } else {
+    state.projects.push({id:'p'+Date.now(),name,notes,status:state.selectedProjectStatus});
+  }
+  save();renderProjects();
+  document.getElementById('project-modal').classList.remove('open');
+}
+document.getElementById('project-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById('project-modal').classList.remove('open');});
+
 // Init
 load();
 if(!state.habits.length)state.habits=DEFAULT_HABITS;
@@ -672,6 +866,7 @@ renderRoutine('morning');renderRoutine('evening');
 renderHabits();
 if(state.mealPlan)renderMealPlan();
 updateHome();
+renderAffirmations();
 fetchWeather();
 setTimeout(refreshSummary,800);
 </script>
